@@ -1,0 +1,39 @@
+#Lab :Google Cloud Fundamentals: Getting Started with Compute Engine
+
+#Step 1: Create a virtual machine "my-vm-1"
+  gcloud beta compute --project=qwiklabs-gcp-02-eb89e648511d instances create my-vm-1 --zone=us-central1-a --machine-type=n1-standard-1 --image=debian-9-stretch-v20200910 --image-project=debian-cloud --subnet=default 
+
+#Step 2: Create another virtual machine my-vm2
+    #1a - display a list of all the zones in the region  assigned 
+       > gcloud compute zones list | grep us-central1
+     #1b - set default zone
+        > gcloud config set compute/zone us-central1-a
+     #1c - create a VM instance called my-vm-2 
+        > gcloud compute instances create "my-vm-2" \
+          --machine-type "n1-standard-1" \
+          --image-project "debian-cloud" \
+          --image "debian-9-stretch-v20190213" \
+          --subnet "default"
+  #Step 3: Connect between the two instances
+    #Step3a - SSH into the "my-vm2"instance 
+      >  gcloud compute ssh my-vm-2 --project=qwiklabs-gcp-02-eb89e648511d  --zone us-central1-a
+    #step3b - Inside my-vm-2 ping my-vm-1
+     >  ping my-vm-1
+     #Exit my-vm-2 by pressing Cntrl+C
+     
+    #Stepc - SSH into the "my-vm1"instance 
+      >  gcloud compute ssh my-vm-1 --project=qwiklabs-gcp-02-eb89e648511d  --zone us-central1-a
+    #step3d -  install the Nginx web server
+     >  sudo apt-get install nginx-light -y
+    #Step3e - Open nano editor and add a custome message
+     >  sudo nano /var/www/html/index.nginx-debian.html
+    #Step3f - Press Ctrl+O and then press Enter to save your edited file, and then press Ctrl+X to exit the nano text editor.
+    #Step3g - Check if webserver is live on my-vm-1
+      > curl http://localhost/
+    #Step3h -  exit the command prompt on my-vm-1,
+    
+    #Step3i - SSH into the "my-vm2"instance 
+        >  gcloud compute ssh my-vm-2 --project=qwiklabs-gcp-02-eb89e648511d  --zone us-central1-a
+        
+    #step3j - checkif my-vm-2 can reach the web server on my-vm-1
+       > curl http://my-vm-1/
